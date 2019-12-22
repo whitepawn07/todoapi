@@ -45,3 +45,58 @@ class UserRegistrationSerializers(serializers.ModelSerializer):
 
         return user
         
+# class UserLoginSerializer(serializers.ModelSerializer):
+
+#     email = serializers.EmailField(
+#         required=False,
+#         allow_blank=True,
+#         write_only=True,
+#         label="Email Address"
+#     )
+
+#     token = serializers.CharField(
+#         allow_blank=True,
+#         read_only=True
+#     )
+
+#     password = serializers.CharField(
+#         required=True,
+#         write_only=True,
+#         style={'input_type': 'password'}
+#     )
+
+#     class Meta(object):
+#         model = User
+#         fields = ['email', 'password', 'token']
+
+#     def validate(self, data):
+#         email = data.get('email', None)
+#         password = data.get('password', None)
+
+#         if not email and not username:
+#             raise serializers.ValidationError("Please enter username or email to login.")
+
+#         user = User.objects.filter(
+#             Q(email=email)
+#         ).exclude(
+#             email__isnull=True
+#         ).exclude(
+#             email__iexact=''
+#         ).distinct()
+
+#         if user.exists() and user.count() == 1:
+#             user_obj = user.first()
+#         else:
+#             raise serializers.ValidationError("This username/email is not valid.")
+
+#         if user_obj:
+#             if not user_obj.check_password(password):
+#                 raise serializers.ValidationError("Invalid credentials.")
+
+#         if user_obj.is_active:
+#             token, created = Token.objects.get_or_create(user=user_obj)
+#             data['token'] = token
+#         else:
+#             raise serializers.ValidationError("User not active.")
+
+#         return data

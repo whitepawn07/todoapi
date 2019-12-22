@@ -36,4 +36,16 @@ class UserEmailVerificationView(views.APIView):
         return response.Response(status=status.HTTP_204_NO_CONTENT)
     
 
-    
+# class UserLoginAPIView(views.APIView):
+#     """
+#     Endpoint for user login. Returns authentication token on success.
+#     """
+#     permission_classes = (permissions.AllowAny, )
+#     serializer_class = serializers.UserLoginSerializer
+
+#     def post(self, request):
+#         serializer = self.serializer_class(data=request.data)
+#         if serializer.is_valid(raise_exception=True):
+#             return Response(serializer.data, status=status.HTTP_200_OK)
+
+#         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)

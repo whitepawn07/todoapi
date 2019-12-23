@@ -1,6 +1,7 @@
 from django.contrib.auth.models import User
 from django.contrib.sites.shortcuts import get_current_site
 from rest_framework import serializers
+from rest_framework_simplejwt.tokens import RefreshToken
 from todo.models import List, Profile
 from django.contrib.auth.models import User
 import pdb
@@ -45,58 +46,53 @@ class UserRegistrationSerializers(serializers.ModelSerializer):
 
         return user
         
-# class UserLoginSerializer(serializers.ModelSerializer):
+class UserLoginSerializer(serializers.ModelSerializer):
 
-#     email = serializers.EmailField(
-#         required=False,
-#         allow_blank=True,
-#         write_only=True,
-#         label="Email Address"
-#     )
+    email = serializers.EmailField(
+        required=True,
+        write_only=True,
+        label="Email Address"
+    )
 
-#     token = serializers.CharField(
-#         allow_blank=True,
-#         read_only=True
-#     )
+    password = serializers.CharField(
+        required=True,
+        write_only=True,
+        style={'input_type': 'password'}
+    )
 
-#     password = serializers.CharField(
-#         required=True,
-#         write_only=True,
-#         style={'input_type': 'password'}
-#     )
+    token = serializers.CharField(
+        allow_blank=True,
+        read_only=True
+    )
 
-#     class Meta(object):
-#         model = User
-#         fields = ['email', 'password', 'token']
+    class Meta(object):
+        model = Profile
+        fields = ['email', 'password','token']
 
-#     def validate(self, data):
-#         email = data.get('email', None)
-#         password = data.get('password', None)
+    def validate(self, data):
+        email = data.get('email', None)
+        password = data.get('password', None)
 
-#         if not email and not username:
-#             raise serializers.ValidationError("Please enter username or email to login.")
+        if not email:
+            raise serializers.ValidationError("Please enter email to login.")
 
-#         user = User.objects.filter(
-#             Q(email=email)
-#         ).exclude(
-#             email__isnull=True
-#         ).exclude(
-#             email__iexact=''
-#         ).distinct()
+        user = Profile.objects.filter(
+            email=email
+        ).distinct()
 
-#         if user.exists() and user.count() == 1:
-#             user_obj = user.first()
-#         else:
-#             raise serializers.ValidationError("This username/email is not valid.")
+        if user.exists() and user.count() == 1:
+            user_obj = user.first()
+        else:
+            raise serializers.ValidationError("This email is not valid.")
 
-#         if user_obj:
-#             if not user_obj.check_password(password):
-#                 raise serializers.ValidationError("Invalid credentials.")
+        if user_obj:
+            if not user_obj.check_password(password):
+                raise serializers.ValidationError("Invalid credentials.")
 
-#         if user_obj.is_active:
-#             token, created = Token.objects.get_or_create(user=user_obj)
-#             data['token'] = token
-#         else:
-#             raise serializers.ValidationError("User not active.")
-
-#         return data
+        if not user_obj.is_verified and not user_obj.is_admin:
+            raise serializers.ValidationError("User not active.")
+        else:
+            token = RefreshToken.for_user(user_obj)
+            data['token'] = 'Bearer '+str(token)
+        
+        return data

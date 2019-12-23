@@ -15,7 +15,7 @@ Including another URLconf
 """
 from django.urls import include, path
 from django.contrib import admin
-from rest_framework_simplejwt.views import TokenObtainPairView, TokenRefreshView
+from rest_framework_simplejwt.views import TokenObtainPairView, TokenRefreshView, TokenVerifyView
 
 # router = routers.DefaultRouter()
 # router.register(r'users', views.UserViewSet)
@@ -25,8 +25,9 @@ from rest_framework_simplejwt.views import TokenObtainPairView, TokenRefreshView
 # # Additionally, we include login URLs for the browsable API.
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('', include('todo.urls')),
+    path('api/', include('todo.urls')),
     path('api-auth/',include('rest_framework.urls')),
     path('api/token',TokenObtainPairView.as_view()),
-    path('api/token/refresh',TokenRefreshView.as_view())
+    path('api/token/refresh',TokenRefreshView.as_view()),
+    path('api/token/verify/', TokenVerifyView.as_view()),
 ]

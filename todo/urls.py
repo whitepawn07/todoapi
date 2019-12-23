@@ -14,9 +14,9 @@ urlpatterns = [
         main.UserRegistrationView.as_view(),
         name='register'),
 
-    # url(r'^login/$',
-    #     views.UserLoginAPIView.as_view(),
-    #     name='login'),
+    url(r'^login/$',
+        main.UserLoginAPIView.as_view(),
+        name='login'),
 
     url(r'^activate/(?P<uidb64>[0-9A-Za-z_\-]+)/(?P<token>[0-9A-Za-z]{1,13}-[0-9A-Za-z]{1,20})/$',
                 main.UserEmailVerificationView.as_view(), name='activate'),

@@ -3,7 +3,7 @@ from django.contrib.auth import get_user_model, models
 from django.shortcuts import render
 from rest_framework import viewsets, permissions, views, response, status, authentication, generics
 from todo.models import List, Profile
-from todo.todoserializers import TodoSerializers, UserSerializers, UserRegistrationSerializers
+from todo.todoserializers import TodoSerializers, UserSerializers, UserRegistrationSerializers, UserLoginSerializer
 from todo.forms.registerForm import SignupForm
 
 
@@ -36,16 +36,17 @@ class UserEmailVerificationView(views.APIView):
         return response.Response(status=status.HTTP_204_NO_CONTENT)
     
 
-# class UserLoginAPIView(views.APIView):
-#     """
-#     Endpoint for user login. Returns authentication token on success.
-#     """
-#     permission_classes = (permissions.AllowAny, )
-#     serializer_class = serializers.UserLoginSerializer
+class UserLoginAPIView(views.APIView):
+    """
+    Endpoint for user login. Returns authentication token on success.
+    """
+    permission_classes = (permissions.AllowAny, )
+    serializer_class = UserLoginSerializer
 
-#     def post(self, request):
-#         serializer = self.serializer_class(data=request.data)
-#         if serializer.is_valid(raise_exception=True):
-#             return Response(serializer.data, status=status.HTTP_200_OK)
+    def post(self, request):
+        serializer = self.serializer_class(data=request.data)
+        if serializer.is_valid(raise_exception=True):
+            print(serializer.data)
+            return response.Response(serializer.data, status=status.HTTP_200_OK)
 
-#         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+        return response.Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)

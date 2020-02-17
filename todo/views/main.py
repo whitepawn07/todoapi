@@ -10,7 +10,7 @@ from todo.forms.registerForm import SignupForm
 class ListView(viewsets.ModelViewSet):
     queryset = List.objects.all()
     serializer_class = TodoSerializers
-    permission_classes = (permissions.IsAuthenticatedOrReadOnly,)
+    permission_classes = (permissions.IsAuthenticatedOrReadOnly, )
 
 
 class UserView(viewsets.ReadOnlyModelViewSet):

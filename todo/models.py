@@ -9,6 +9,7 @@ from django.utils.encoding import force_bytes,force_text
 from django.template.loader import get_template
 from django.core.mail import EmailMessage
 from todo.helpers.generateToken import account_activation_token
+from tenants.models import TenantAwareModel
 
 class PersonManager(BaseUserManager):
     def create_user(self, email, first_name, last_name, password, site, send_email = False):
@@ -129,9 +130,7 @@ class Profile(AbstractBaseUser):
     
         return user
 
-
-
-class List(models.Model):
+class List(TenantAwareModel):
     """
     a model for creating a list of a user
     """

@@ -2,6 +2,7 @@ from django.urls import include, path
 from django.conf.urls import url
 from .views import main
 from rest_framework import routers
+from rest_framework.documentation import include_docs_urls
 from todo.views import main
 
 router = routers.DefaultRouter()

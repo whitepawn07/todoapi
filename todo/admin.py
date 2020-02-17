@@ -3,6 +3,7 @@ from django.contrib.auth.models import Group
 from todo.forms.userForms import UserCreationForm, UserChangeForm
 from django.contrib.auth.admin import UserAdmin as BaseUserAdmin
 from todo.models import Profile,List
+# from tenants.utility import tenant_schema_from_request, set_tenant_schema_for_request
 
 class UserAdmin(BaseUserAdmin):
     # The forms to add and change user instances
@@ -31,10 +32,23 @@ class UserAdmin(BaseUserAdmin):
     ordering = ('email',)
     filter_horizontal = ()
 
-
+@admin.register(List)
 class ListAdmin(admin.ModelAdmin):
     list_display = ('title', 'description', 'is_done', 'priority', 'created_by', 'created_at')
 
+    # def get_queryset(self, request, *args, **kwargs):
+    #     set_tenant_schema_for_request(self.request)
+    #     queryset = super().get_queryset(request, *args, **kwargs)
+    #     tenant = tenant_from_request(request)
+    #     queryset = queryset.filter(tenant=tenant)
+    #     return queryset
+        
+    # def save_model(self, request, obj, form, change):
+    #     set_tenant_schema_for_request(self.request)
+    #     tenant = tenant_from_request(request)
+    #     obj.tenant = tenant
+    #     super().save_model(request, obj, form, change)
+
 admin.site.register(Profile,UserAdmin)
-admin.site.register(List)
 admin.site.unregister(Group)
+# admin.site.register(List)

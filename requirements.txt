@@ -6,9 +6,9 @@
 #
 asgiref==3.2.3            # via django
 click==7.0                # via pip-chill, pip-tools
-django==3.0.3
-pip-chill==0.1.8
-pip-tools==4.4.1
+django==3.0.7             # via -r requirements.in
+pip-chill==0.1.8          # via -r requirements.in
+pip-tools==4.4.1          # via -r requirements.in
 pytz==2019.3              # via django
 six==1.14.0               # via pip-tools
 sqlparse==0.3.0           # via django
